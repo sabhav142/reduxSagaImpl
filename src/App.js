@@ -12,48 +12,23 @@ import {
 import AddToDos from './Component2/AddToDos';
 import SlideShow from './Component3/SlideShow';
 import RegForm from './Component4/RegForm';
-import About from './About';
+import { Provider } from 'react-redux';
+import Productdetails from './Components/ProductDetails';
+
+
 
 
 
 
 function App() {
-  const [data , setdata] = useState([]);
+  
   
 
-  // const router = createBrowserRouter([
-  //   {
-  //     path: "/List",
-  //     element: <ListPage data={data} />,
-
-      
-  //   },
-  //   {
-  //     path: "/todo",
-  //     element: < AddToDos />,
-
-      
-  //   },
-  //   {
-  //     path: "/slideshow",
-  //     element: < SlideShow/>,
-
-      
-  //   },
-  //   {
-  //     path: "/details",
-  //     element: < RegForm/>,
-
-      
-  //   },
-    
-    
-  // ]);
-
+  
   const router = [
     {
       path: "/List",
-      element: <ListPage data={data} />,
+      element: <ListPage />,
 
       
     },
@@ -75,23 +50,17 @@ function App() {
 
       
     },
+    {
+      path: "/List/:id",
+      element: < Productdetails/>,
+
+      
+    },
    
     
   ];
 
-  useEffect(()=>{
-    async function fetchData(){
 
-     const response = await  fetch('https://dummyjson.com/products')
-     const newData = await response.json();
-     setdata(newData.products)
-  
-  
-    }
-    fetchData()
-
-    
-  },[])
 
 
 
@@ -99,7 +68,7 @@ function App() {
 
   return (
     <div className="App">
-      
+  
       <Header/>
       <Routes>
      {
@@ -108,12 +77,8 @@ function App() {
       })
      }
       </Routes>
-      {/* <RouterProvider 
-      
-      router={router}>
-   
-    </RouterProvider> */}
-  
+    
+
     </div>
   );
 }

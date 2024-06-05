@@ -1,23 +1,47 @@
 import { useEffect, useState } from "react";
 import Card from "./Card"
-import { fetchProductsSuccess } from "../Slice/userSlice";
-import { useDispatch } from "react-redux";
-import { GET_ALL_PRODUCTS } from "../Services/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { requestToGetAllProducts, requestToGetProductsById } from "../store/productSlice";
+import { useParams, useNavigate } from "react-router-dom";
 
-const ListPage = (data) => {
+
+
+
+
+const ListPage = () => {
   const dispatch = useDispatch();
+  const Navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState('');
-const handleOnChange = (e) => {
+  const {
+    Products :{ isGetAll,
+      allProducts:{products}
+    }
+      } =useSelector((state)=>state)
+  const handleOnChange = (e) => {
     setSearchTerm(e.target.value);
   };
-  const filteredData = searchTerm === "" ? data.data : data.data.filter((item) => {
+
+  const {id} = useParams();
+  const filteredData = searchTerm === "" ? products : products.filter((item) => {
     return item.title.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  useEffect(()=>{
+console.log(id);
 
-    dispatch(fetchProductsSuccess({type:GET_ALL_PRODUCTS}))
-  },[])
+const handleClick=(id)=>{
+  dispatch(requestToGetProductsById({id}))
+  Navigate(`/List/${id}`)
+  
+console.log(id ,"idmili")
+}
+
+  useEffect(()=>{
+dispatch(requestToGetAllProducts())
+  },[dispatch])
+
+
+
   return (
     <>
       <span style={{ marginLeft: "auto", marginRight: "auto" }}>
@@ -28,7 +52,7 @@ const handleOnChange = (e) => {
 
           {filteredData.map((item, index) => {
             return (
-              <Card key={index} title={item.title} images={item.images[0]} />
+              <Card  onClick={()=>handleClick(item.id)} key={index} title={item.title} images={item.images[0]} />
             )
           })}
         </div>
